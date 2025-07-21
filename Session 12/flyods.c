@@ -14,8 +14,7 @@ void flyod(int adj[n][n], int n) {
             }
         }
     }   
-    
-    // Floyd's algorithm
+  
     for(int k = 0; k < n; k++) {
         for(int i = 0; i < n; i++) {
 
