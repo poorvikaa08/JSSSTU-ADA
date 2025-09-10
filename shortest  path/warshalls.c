@@ -3,7 +3,13 @@
 
 int n, opCount = 0, path[100][100];
 
-void warshall(int adj[n][n], int n){
+void warshall(int adj[100][100], int n){
+    // Initialize path matrix
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n; j++){
+            path[i][j] = adj[i][j];
+        }
+    }
 
     for(int k = 0; k < n; k++){
         for(int i = 0; i < n; i++){
@@ -22,15 +28,16 @@ void tester() {
     printf("Enter the number of nodes: ");
     scanf("%d", &n);
 
-    int adj[n][n];
+    int adj[100][100];
 
-    printf("Enter the adjacency matrix: ");
+    printf("Enter the adjacency matrix:\n");
     for(int i = 0; i < n; i++){
         for(int j = 0; j < n; j++){
-            scanf("%d", &adj[i][j])
+            scanf("%d", &adj[i][j]);
         }
     }
 
+    opCount = 0;
     warshall(adj, n);
 
     printf("Transitive closure of the graph is:\n");
@@ -46,36 +53,36 @@ void tester() {
 void plotter() {
 
     FILE *f1 = fopen("warshallBest.txt", "w");
-    FILE *f2 = fopen("warshallWorst.txt", "r");
+    FILE *f2 = fopen("warshallWorst.txt", "w");
 
     for(int k = 1; k<=10; k++ ){
         n = k;
+        int adj[100][100];
 
-        int adj[n][n];
-
-        // Best case
-        for(int j=0; j<n; j++){
-            for(int i=0; i<n; i++){
-                if (i != j) adj[j][i] = 1;
-                else adj[j][i] = 0;
+        // Best case - all connected
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if (i != j) adj[i][j] = 1;
+                else adj[i][j] = 0;
             }
         }
 
+        opCount = 0;
         warshall(adj, n);
         fprintf(f1, "%d\t%d\n", n, opCount);
 
-        // Worst case
+        // Worst case - linear chain
         for(int i = 0; i < n; i++){
-            for(int j = 0; j < n;j++){
+            for(int j = 0; j < n; j++){
                 adj[i][j] = 0;
             }
         }
 
-        for(int i=0; i<n-1; i++){
-            adj[i][i+1] = 1
+        for(int i = 0; i < n-1; i++){
+            adj[i][i+1] = 1;
         }
-        adj[n-1][0] = 1; // Making it a cycle
 
+        opCount = 0;
         warshall(adj, n);
         fprintf(f2, "%d\t%d\n", n, opCount);
     }

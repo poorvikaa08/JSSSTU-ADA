@@ -2,8 +2,9 @@
 #include<stdlib.h>
 
 int isCycle = 0, isTester = 0, opCount = 0, n, components = 0;
+int queue[100], front = -1, rear = -1;
 
-void dfs(int matrix[100][100], int *visited, int source, int parent);
+void bfs(int matrix[100][100], int *visited, int source);
 
 void checkConnectivity(int matrix[100][100]){
     int visited[100], k = 1;
@@ -18,25 +19,31 @@ void checkConnectivity(int matrix[100][100]){
             if(isTester) {
                 printf("Component %d: ", k++);
             }
-            dfs(matrix, &visited[0], i, -1);
+            bfs(matrix, &visited[0], i);
         }
     }
 }
 
-void dfs(int matrix[100][100], int *visited, int source, int parent) {
+void bfs(int matrix[100][100], int *visited, int source) {
+    front = rear = -1;
+    queue[++rear] = source;
     visited[source] = 1;
 
     if(isTester) {
         printf("%d ", source);
     }
 
-    for(int i = 0; i < n; i++) {
-        opCount++;
-        if(matrix[source][i]) {
-            if(visited[i] == 1 && i != parent) {
-                isCycle = 1;
-            } else if(visited[i] == 0) {
-                dfs(matrix, visited, i, source);
+    while(front != rear) {
+        int current = queue[++front];
+        
+        for(int i = 0; i < n; i++) {
+            opCount++;
+            if(matrix[current][i] && visited[i] == 0) {
+                queue[++rear] = i;
+                visited[i] = 1;
+                if(isTester) {
+                    printf("%d ", i);
+                }
             }
         }
     }
@@ -56,23 +63,36 @@ void tester() {
     }
 
     isTester = 1;
-    printf("DFS Traversal: ");
+    components = 0;
+    printf("BFS Traversal: ");
     checkConnectivity(matrix);
 
     printf("\n");
     printf("Number of connected components: %d\n", components);
-
-    if(isCycle) {
-        printf("The graph contains a cycle.\n");
-    } else {
-        printf("The graph does not contain a cycle.\n");
-    }
 }
 
 void plotter() {
-    
-}
+    FILE *f = fopen("bfs.txt", "w");
 
+    for(int k = 1; k <= 10; k++) {
+        n = k;
+        int matrix[100][100];
+        
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                matrix[i][j] = (i != j) ? 1 : 0;
+            }
+        }
+
+        opCount = 0;
+        isTester = 0;
+        components = 0;
+        checkConnectivity(matrix);
+        fprintf(f, "%d\t%d\n", n, opCount);
+    }
+
+    fclose(f);
+}
 
 int main(){
     int choice;
