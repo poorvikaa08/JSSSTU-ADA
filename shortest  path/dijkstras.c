@@ -7,7 +7,7 @@
 int opCount = 0;
 
 void dijkstras(int n, int cost[MAX][MAX], int distance[MAX], int source) {
-    int visited[MAX], u;
+    int visited[MAX], u = -1;
 
     for(int i =0; i<n; i++){
         distance[i] = cost[source][i];
@@ -64,7 +64,7 @@ void tester(){
     printf("Shortest distances from node %d:\n", source);
     printf("Source\tDestination\tDistance\n");
     for(int i =0; i<n; i++) {
-        printf("%d\t%d\t\t%d\n", source, i+1, distance[i]);
+        printf("%d\t%d\t\t%d\n", source, i, distance[i]);
     }
 }
 
@@ -81,12 +81,13 @@ void plotter() {
                     cost[i][j] = rand() % 10 + 1; // Random weights between 1 and 10
                 }
             }
-            opCount = 0;
-
-            dijkstras(k, cost, distance, i);
-            fprintf(f, "%d\t%d\n",k, opCount);
         }
+        opCount = 0;
+        dijkstras(k, cost, distance, 0); // Use source as 0
+        fprintf(f, "%d\t%d\n",k, opCount);
     }
+
+    fclose(f);
 }
 
 int main(){

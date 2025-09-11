@@ -1,9 +1,11 @@
+// filepath: c:\Poorvi\Code\ADALab\JSSSTU-ADA\Session 12\flyods.c
 #include<stdio.h>
 #include<stdlib.h>
+#include<limits.h>
 
 int n, opCount = 0, cost[100][100];
 
-void flyod(int adj[n][n], int n) {
+void floyd(int adj[100][100], int n) {
     // Initialize the cost matrix with the adjacency matrix
     for(int i = 0; i < n; i++) {
         for(int j = 0; j < n; j++) {
@@ -17,27 +19,22 @@ void flyod(int adj[n][n], int n) {
   
     for(int k = 0; k < n; k++) {
         for(int i = 0; i < n; i++) {
-
-            int temp = cost[i][k];
             for(int j = 0; j < n; j++) {
-                if(cost[i][j] > temp){
-                    opCount++;
-                    if(cost[k][j] + cost[k][j] < cost[i][j]) {
-                        cost[i][j] = cost[i][k] + cost[k][j];
-                    }
+                opCount++;
+                if(cost[i][k] != INT_MAX && cost[k][j] != INT_MAX && 
+                   cost[i][k] + cost[k][j] < cost[i][j]) {
+                    cost[i][j] = cost[i][k] + cost[k][j];
                 }
             }
-                
         }
     }
-    
 }
 
 void tester() {
     printf("Enter the number of nodes: ");
     scanf("%d", &n);
 
-    int adj[n][n];
+    int adj[100][100];
 
     printf("Enter the adjacency matrix: \n");
     printf("Use -1 to represent infinity\n\n");
@@ -47,12 +44,16 @@ void tester() {
         }
     }
 
-    flyod(adj, n);
+    floyd(adj, n);
 
-    printf("Transitive closure of the graph is:\n");
+    printf("All pairs shortest path matrix:\n");
     for(int i = 0; i < n; i++){
         for(int j = 0; j < n; j++){
-            printf("%d ", cost[i][j]);
+            if(cost[i][j] == INT_MAX) {
+                printf("INF ");
+            } else {
+                printf("%d ", cost[i][j]);
+            }
         }
         printf("\n");
     }
@@ -61,39 +62,44 @@ void tester() {
 
 void plotter() {
 
-    FILE *f1 = fopen("flyodBest.txt", "w");
-    FILE *f2 = fopen("flyodWorst.txt", "w");
+    FILE *f1 = fopen("floydBest.txt", "w");
+    FILE *f2 = fopen("floydWorst.txt", "w");
 
     for(int k = 1; k<=10; k++ ){
         n = k;
-        opCount = 0; // Reset operation count
+        
+        int adj[100][100];
 
-        int adj[n][n];
-
-        // Best case
-        for(int j=0; j<n; j++){
-            for(int i=0; i<n; i++){
-                if (i != j) adj[j][i] = 1;
-                else adj[j][i] = 0;
+        // Best case - direct edges everywhere (complete graph)
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                if (i != j) adj[i][j] = 1;
+                else adj[i][j] = 0;
             }
         }
 
-        flyod(adj, n);
+        opCount = 0; // Reset operation count
+        floyd(adj, n);
         fprintf(f1, "%d\t%d\n", n, opCount);
 
-        // Worst case
+        // Worst case - initialize with infinity, then create minimal connectivity
         for(int i = 0; i < n; i++){
-            for(int j = 0; j < n;j++){
-                adj[i][j] = 0;
+            for(int j = 0; j < n; j++){
+                if(i == j) {
+                    adj[i][j] = 0;
+                } else {
+                    adj[i][j] = -1; // Use -1 to represent infinity
+                }
             }
         }
 
+        // Create a path: 0->1->2->...->n-1
         for(int i=0; i<n-1; i++){
             adj[i][i+1] = 1;
         }
-        adj[n-1][0] = 1; // Making it a cycle
 
-        flyod(adj, n);
+        opCount = 0; // Reset operation count
+        floyd(adj, n);
         fprintf(f2, "%d\t%d\n", n, opCount);
     }
 
