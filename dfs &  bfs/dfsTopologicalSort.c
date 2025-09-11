@@ -105,9 +105,15 @@ void plotter() {
 
 
         // Create a DAG (Directed Acyclic Graph) for testing
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = i + 1; j < n; j++) {
-                adjMat[i][j] = 1;  // Edges from lower to higher numbered nodes
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                adjMat[i][j] = 0;  // Edges from lower to higher numbered nodes
+            }
+        }
+
+        for(int i = 0; i < n; i++) {
+            for(int j = i + 1; j < n; j++) {
+                adjMat[i][j] = 0;
             }
         }
 
@@ -131,9 +137,9 @@ void plotter() {
 int main() {
     int choice;
 
-printf("\n(1) Tester\n(2) Plotter\n(3) Exit\n");
-printf("\nEnter your choice: ");
-scanf("%d", &choice);
+    printf("\n(1) Tester\n(2) Plotter\n(3) Exit\n");
+    printf("\nEnter your choice: ");
+    scanf("%d", &choice);
 
     switch(choice) {
         case 1:

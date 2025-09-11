@@ -7,20 +7,20 @@ int max(int a, int b){
     return (a > b) ? a : b;
 }
 
-int knapSackMemo(int i, int w){
-    if(i == 0 || w == 0) return 0;
-    
-    if(memo[i][w] != -1) return memo[i][w];
+int knapSackMemo(int i, int j){
+    if(i == 0 || j == 0) return 0;
+
+    if(memo[i][j] != -1) return memo[i][j];
     
     count++;
     
-    if(weight[i-1] > w){
-        memo[i][w] = knapSackMemo(i-1, w);
+    if(j < weight[i-1]) {
+        memo[i][j] = knapSackMemo(i-1, j);
     } else {
-        memo[i][w] = max(knapSackMemo(i-1, w), values[i-1] + knapSackMemo(i-1, w-weight[i-1]));
+        memo[i][j] = max(knapSackMemo(i-1, j), values[i-1] + knapSackMemo(i-1, j-weight[i-1]));
     }
     
-    return memo[i][w];
+    return memo[i][j];
 }
 
 void tester(){
@@ -54,6 +54,8 @@ void tester(){
 
 void plotter(){
     FILE *f = fopen("knapSackMemo.txt", "w");
+
+    srand(time(NULL));
 
     for(int i = 1; i <= 10; i++){
         count = 0;
