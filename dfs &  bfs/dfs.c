@@ -18,7 +18,7 @@ void checkConnectivity(int matrix[100][100]){
             if(isTester) {
                 printf("Component %d: ", k++);
             }
-            dfs(matrix, &visited[0], i, -1);
+            dfs(matrix, visited, i, -1);
         }
     }
 }
@@ -56,7 +56,10 @@ void tester() {
     }
 
     isTester = 1;
-    printf("DFS Traversal: ");
+    isCycle = 0;
+    components = 0;
+    opCount = 0;
+
     checkConnectivity(matrix);
 
     printf("\n");
@@ -75,13 +78,7 @@ void plotter() {
     for(int k = 1; k <= 10; k++) {
         n = k;
         int matrix[100][100];
-        
-        for(int i = 0; i < 100; i++) {
-            for(int j = 0; j < 100; j++) {
-                matrix[i][j] = 0;
-            }
-        }
-        
+    
         for(int i = 0; i < n; i++) {
             for(int j = 0; j < n; j++) {
                 matrix[i][j] = (i != j) ? 1 : 0;

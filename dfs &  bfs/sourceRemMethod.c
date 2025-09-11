@@ -3,31 +3,25 @@
 
 int n, indeg[20], opcount = 0, queue[20], front = -1, rear = -1;
 
-int bfs(int mat[n][n])
-{
+int bfs(int mat[n][n]){
     int count = 0;
     front = rear = -1;
 
-    for (int i = 0; i < n; i++)
-    {
-        if (indeg[i] == 0)
-        {
+    for (int i = 0; i < n; i++){
+        if (indeg[i] == 0){
             queue[++rear] = i;
         }
     }
 
-    while (front != rear)
-    {
+    while (front != rear){
         int curr = queue[++front];
         count++;
 
-        for (int i = 0; i < n; i++)
-        {
+        for (int i = 0; i < n; i++){
             opcount++;
-            if (mat[curr][i])
-            {
+            if (mat[curr][i]){
                 indeg[i]--;
-                if (!indeg[i])
+                if (indeg[i] == 0)
                     queue[++rear] = i;
             }
         }
@@ -36,8 +30,7 @@ int bfs(int mat[n][n])
     return count != n;
 }
 
-void tester()
-{
+void tester(){
     printf("Enter number of vertices :\n");
     scanf("%d", &n);
     int adjMat[n][n];
@@ -46,38 +39,31 @@ void tester()
         indeg[i] = 0;
 
     printf("Enter the adjacency matrix :\n");
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < n; j++){
             scanf("%d", &adjMat[i][j]);
             if (adjMat[i][j])
                 indeg[j]++;
         }
     }
 
-    if (bfs(adjMat))
-    {
+    if (bfs(adjMat)){
         printf("Cycle exists..Cannot perform topological sorting!!!");
         exit(0);
     }
-    else
-    {
+    else {
         printf("Topological sorting order : \n");
 
-        for (int i = 0; i <= rear; i++)
-        {
+        for (int i = 0; i <= rear; i++){
             printf("%d ", queue[i]);
         }
     }
 }
 
-void plotter()
-{
+void plotter(){
     FILE *f1 = fopen("srcrmMatTopSort.txt", "w");
 
-    for (int k = 1; k <= 10; k++)
-    {
+    for (int k = 1; k <= 10; k++){
         n = k;
         int adjMat[n][n];
 
@@ -88,10 +74,8 @@ void plotter()
             for (int j = 0; j < n; j++)
                 adjMat[i][j] = 0;
 
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = i + 1; j < n; j++)
-            {
+        for (int i = 0; i < n; i++){
+            for (int j = i + 1; j < n; j++){
                 adjMat[i][j] = 1;
                 indeg[j]++;
             }
@@ -105,13 +89,11 @@ void plotter()
     fclose(f1);
 }
 
-void main()
-{
+void main(){
     int choice;
     printf("Enter\n1.Tester\n2.Plotter\n");
     scanf("%d", &choice);
-    switch (choice)
-    {
+    switch (choice){
         case 1:
             tester();
             break;

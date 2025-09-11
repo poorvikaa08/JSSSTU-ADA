@@ -19,7 +19,7 @@ void checkConnectivity(int matrix[100][100]){
             if(isTester) {
                 printf("Component %d: ", k++);
             }
-            bfs(matrix, &visited[0], i);
+            bfs(matrix, visited, i);
         }
     }
 }
@@ -44,6 +44,9 @@ void bfs(int matrix[100][100], int *visited, int source) {
                 if(isTester) {
                     printf("%d ", i);
                 }
+            } else if(matrix[current][i] && visited[i] == 1) {
+                // Check for cycle (back edge found)
+                isCycle = 1;
             }
         }
     }
@@ -63,12 +66,20 @@ void tester() {
     }
 
     isTester = 1;
+    isCycle = 0;
     components = 0;
-    printf("BFS Traversal: ");
+    opCount = 0;
+
     checkConnectivity(matrix);
 
     printf("\n");
     printf("Number of connected components: %d\n", components);
+
+    if(isCycle) {
+        printf("Cycle detection: CYCLE FOUND\n");
+    } else {
+        printf("Cycle detection: NO CYCLE (tree/forest structure)\n");
+    }
 }
 
 void plotter() {
@@ -86,7 +97,9 @@ void plotter() {
 
         opCount = 0;
         isTester = 0;
+        isCycle = 0;
         components = 0;
+        
         checkConnectivity(matrix);
         fprintf(f, "%d\t%d\n", n, opCount);
     }
