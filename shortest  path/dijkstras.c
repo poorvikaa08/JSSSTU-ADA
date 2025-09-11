@@ -84,7 +84,7 @@ void plotter() {
             opCount = 0;
 
             dijkstras(k, cost, distance, i);
-            fprintf(f, "%d\t%d\t%d\n", i, k, opCount);
+            fprintf(f, "%d\t%d\n",k, opCount);
         }
     }
 }

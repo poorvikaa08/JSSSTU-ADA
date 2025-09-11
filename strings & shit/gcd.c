@@ -81,7 +81,7 @@ void plotter() {
         int min = INT_MAX, max = INT_MIN;
         for(int j = 1; j <= i; j++) {
             for(int k = 1; k <= i; k++) {
-                gcdEuclid(j, k);
+                euclid(j, k);
                 if(opCount < min) min = opCount;
                 if(opCount > max) max = opCount;
             }
@@ -95,7 +95,7 @@ void plotter() {
         int min = INT_MAX, max = INT_MIN;
         for(int j = 1; j <= i; j++) {
             for(int k = 1; k <= i; k++) {
-                gcdConsecutive(j, k);
+                consecutiveIntegerCheck(j, k);
                 if(opCount < min) min = opCount;
                 if(opCount > max) max = opCount;
             }
@@ -109,7 +109,7 @@ void plotter() {
         int min = INT_MAX, max = INT_MIN;
         for(int j = 1; j <= i; j++) {
             for(int k = 1; k <= i; k++) {
-                gcdModified(j, k);
+                modifiedEuclid(j, k);
                 if(opCount < min) min = opCount;
                 if(opCount > max) max = opCount;
             }

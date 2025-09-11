@@ -8,7 +8,7 @@ void flyod(int adj[n][n], int n) {
     for(int i = 0; i < n; i++) {
         for(int j = 0; j < n; j++) {
             if(adj[i][j] == -1) {
-                cost[i][j] = _INTEGRAL_MAX_BITS; // Use a large number instead of infinity
+                cost[i][j] = INT_MAX;
             } else {
                 cost[i][j] = adj[i][j];
             }
@@ -61,8 +61,8 @@ void tester() {
 
 void plotter() {
 
-    FILE *f1 = fopen("warshallBest.txt", "w");
-    FILE *f2 = fopen("warshallWorst.txt", "w");
+    FILE *f1 = fopen("flyodBest.txt", "w");
+    FILE *f2 = fopen("flyodWorst.txt", "w");
 
     for(int k = 1; k<=10; k++ ){
         n = k;
